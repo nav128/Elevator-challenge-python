@@ -61,8 +61,6 @@ class BuildingsSystem():
         while running:
             # track time laps and update global variable
             tick = pygame.time.get_ticks()
-            if global_vars.ggg:
-                global_vars.bbb+=tick
             global_vars.GAME_ITERATION_LAPS_TIME_MS = tick -last_iteration
             last_iteration = tick
 

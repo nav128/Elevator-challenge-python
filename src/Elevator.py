@@ -11,22 +11,22 @@ elevator_surface = pygame.transform.scale(elevator_img, elevator_size)
 sound = pygame.mixer.Sound(global_vars.ELEVATOR_DING_FILE)
 
 class Elevator():
-    def __init__(self, elevator_number, surface: pygame.Surface, notify_arrival) -> None:
+    def __init__(self, elevator_number, building_surface: pygame.Surface, notify_arrival) -> None:
         self.queue = []
         self.current_floor = 0
         self.waiting = 0
         self.notify_arrival = notify_arrival
 
         self.elevator_number = elevator_number
-        self.surface = surface
+        self.building_surface = building_surface
         self.x = global_vars.BULDING_WIDTH_PX + elevator_number * global_vars.ELEVATOR_IMG_WIDTH_PX
-        self.y = surface.get_height() - global_vars.ELEVATOR_IMG_HEIGHT_PX
+        self.y = building_surface.get_height() - global_vars.ELEVATOR_IMG_HEIGHT_PX
 
 
     def draw(self):
         if self.waiting > 0:
-            pygame.draw.rect(self.surface, 'red', (self.x, self.y, *elevator_size))
-        self.surface.blit(elevator_surface, (self.x, self.y))
+            pygame.draw.rect(self.building_surface, 'red', (self.x, self.y, *elevator_size))
+        self.building_surface.blit(elevator_surface, (self.x, self.y))
 
 
     def estimate_arrival_time(self, floor_number):
@@ -44,6 +44,9 @@ class Elevator():
 
     def add_stop(self, floor_number, eta, px_target):
         if self.current_floor == floor_number:
+            waiting_adjustment = global_vars.MS_WAIT_IN_FLOOR - self.waiting
+            for task in self.queue:
+                task['eta'] += waiting_adjustment
             self._on_arrival()
         else:
             self.queue.insert(0,{

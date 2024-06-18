@@ -6,10 +6,10 @@ import pygame
 
 class Floor():
     "sdfsdfs"
-    def __init__(self, floor_number, surface: pygame.Surface ,mangment_system) -> None:
+    def __init__(self, floor_number, building_surface: pygame.Surface ,mangment_system) -> None:
         self.floor_number = floor_number
-        self.surface = surface
-        self.y = self.surface.get_height() - (self.floor_number + 1) * global_vars.FLOOR_HEIGHT_PX
+        self.building_surface = building_surface
+        self.y = self.building_surface.get_height() - (self.floor_number + 1) * global_vars.FLOOR_HEIGHT_PX
 
         self.mangment_system = mangment_system
         self._eta = 0
@@ -50,7 +50,7 @@ class Floor():
                                                  global_vars.FLORR_BUTTON_COLLOR_WAIT if self._eta > 0 else global_vars.FLORR_BUTTON_COLLOR_HOLD ),
                         (global_vars.FLOOR_BUTTON_X+ global_vars.FLOOR_BUTTON_WIDTH, global_vars.FLOOR_BUTTON_Y))
             
-        self.surface.blit(_floor_img, (0, self.y))
+        self.building_surface.blit(_floor_img, (0, self.y))
         
 
     def handle_click(self, x, y):
@@ -66,7 +66,9 @@ class Floor():
         self.mangment_system(self.floor_number)
     
     def update_eta(self, eta):
+        print(self.floor_number, eta/1000)
         self._eta = eta
 
     def update_holding_elevator(self, remaining_time):
+        print('\t',self.floor_number, remaining_time/1000)
         self._holding_elevator = remaining_time
