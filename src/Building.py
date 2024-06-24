@@ -8,9 +8,9 @@ import global_vars
 
 class Building():
     def __init__(self, n_floors, n_elevators) -> None:
-        self.surface_width = (global_vars.BULDING_WIDTH_PX +
-                                n_elevators * global_vars.ELEVATOR_IMG_WIDTH_PX +
-                                global_vars.BUILDING_GAP_PX)
+        self.surface_width = (global_vars.BULDING_WIDTH_PX
+                              + n_elevators * global_vars.ELEVATOR_IMG_WIDTH_PX
+                              + global_vars.BUILDING_GAP_PX)
         self.surface_height =  n_floors * global_vars.FLOOR_HEIGHT_PX
 
         self.surface = pygame.Surface((self.surface_width, self.surface_height))
@@ -18,9 +18,6 @@ class Building():
                                     for i in range(n_floors)]
         self.elevators: List[Elevator] = [Elevator(i, self.surface, self.update_arrival_status)
                                           for i in range(n_elevators)]
-
-        self.floors_pos_y = [[self.floors[i].y, self.floors[i].y + global_vars.FLOOR_HEIGHT_PX]
-                             for i in range(len(self.floors))]
 
     def _draw(self):
         self.surface.fill('white')
@@ -44,11 +41,13 @@ class Building():
 
 
     def _determine_flor_y(self, y):
-        for i,[y_0,y_1 ]in enumerate(self.floors_pos_y):
-            if y_0 <= y <= y_1:
-                return self.floors[i], y -y_0
-        return None, None
-
+        _y = self.surface_height - y
+        floor_number = int(_y // global_vars.FLOOR_HEIGHT_PX)
+        if floor_number >= len(self.floors):
+            return None, None
+        floor = self.floors[floor_number]
+        normilzed_y = y - floor.y
+        return floor, normilzed_y
 
     def handle_click_event(self, x,y):
         floor, adjusted_y = self._determine_flor_y(y)

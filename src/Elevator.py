@@ -1,4 +1,5 @@
 
+from typing import Callable
 import global_vars
 import pygame
 pygame.init()
@@ -11,7 +12,10 @@ elevator_surface = pygame.transform.scale(elevator_img, elevator_size)
 sound = pygame.mixer.Sound(global_vars.ELEVATOR_DING_FILE)
 
 class Elevator():
-    def __init__(self, elevator_number, building_surface: pygame.Surface, notify_arrival) -> None:
+    def __init__(self, 
+            elevator_number : int,
+            building_surface: pygame.Surface,
+            notify_arrival: Callable) -> None:
         self.queue = []
         self.current_floor = 0
         self.waiting = 0

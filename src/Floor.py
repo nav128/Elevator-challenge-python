@@ -1,11 +1,13 @@
 import global_vars
 import pygame
 
-
+def round_to_halfs(ms):
+    "1.9 -> 2.0, 1.2 -> 1.5"
+    remainder = ms%0.5
+    return ms + (0.5 - remainder)
 
 
 class Floor():
-    "sdfsdfs"
     def __init__(self, floor_number, building_surface: pygame.Surface ,mangment_system) -> None:
         self.floor_number = floor_number
         self.building_surface = building_surface
@@ -21,11 +23,6 @@ class Floor():
     
     
     def draw(self):
-        def round_to_halfs(ms):
-            "1.9 -> 2.0, 1.2 -> 1.5"
-            frac = ms%0.5
-            return ms + (0.5 - frac)
-        
         _floor_img = pygame.transform.scale(self.floor_img, (global_vars.BULDING_WIDTH_PX,global_vars.FLOOR_HEIGHT_PX)) 
         # add button
         pygame.draw.rect(_floor_img,
@@ -46,9 +43,13 @@ class Floor():
 
         # add timer
         if (self._eta + self._holding_elevator) > 0:
-            _floor_img.blit(self.font.render(f'{round_to_halfs((self._eta + self._holding_elevator)/1_000):.1f}', True, (0,0,0), 
-                                                 global_vars.FLORR_BUTTON_COLLOR_WAIT if self._eta > 0 else global_vars.FLORR_BUTTON_COLLOR_HOLD ),
-                        (global_vars.FLOOR_BUTTON_X+ global_vars.FLOOR_BUTTON_WIDTH, global_vars.FLOOR_BUTTON_Y))
+            _floor_img.blit(self.font.render(
+                    f'{round_to_halfs((self._eta + self._holding_elevator)/1_000):.1f}', True, (0,0,0), 
+                    global_vars.FLORR_BUTTON_COLLOR_WAIT if self._eta > 0 
+                    else global_vars.FLORR_BUTTON_COLLOR_HOLD 
+                ),
+                (global_vars.FLOOR_BUTTON_X+ global_vars.FLOOR_BUTTON_WIDTH, global_vars.FLOOR_BUTTON_Y)
+            )
             
         self.building_surface.blit(_floor_img, (0, self.y))
         
@@ -66,9 +67,7 @@ class Floor():
         self.mangment_system(self.floor_number)
     
     def update_eta(self, eta):
-        print(self.floor_number, eta/1000)
         self._eta = eta
 
     def update_holding_elevator(self, remaining_time):
-        print('\t',self.floor_number, remaining_time/1000)
         self._holding_elevator = remaining_time

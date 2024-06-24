@@ -4,9 +4,9 @@ from screeninfo import get_monitors
 GAME_MAX_ITERATIONS_PER_SECOND = 27
 GAME_ITERATION_LAPS_TIME_MS = 0
 GAME_LAYOUT = [
-    {'floors': 18, 'elevators': 6},
-    {'floors': 1, 'elevators': 6}, 
-    {'floors': 1, 'elevators': 6}, 
+    {'floors': 10, 'elevators': 13},
+    {'floors': 5, 'elevators': 2}, 
+    {'floors': 7, 'elevators': 2}, 
     {'floors': 16, 'elevators': 4}
     ]
 
@@ -17,6 +17,9 @@ monitor = get_monitors()[0]
 GAME_MAX_SCREEN_HEIGHT_PX = monitor.height - 100
 GAME_MAX_SCREEN_WIDTH_PX = monitor.width - 150
 GAME_SCROLL_PX_PER_SWIPE = 50
+GAME_SCALE_RATE = 0.1
+GAME_SCALE_MIN = 0.5
+GAME_SCALE_MAX = 1.5
 
 # BULDING
 BULDING_WIDTH_PX = 200
